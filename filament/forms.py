@@ -16,6 +16,7 @@ class FilamentForm(forms.Form):
             'class': 'form-control',
             'form': 'filament_form',
             'placeholder': 'g単位',
+            'min': 0,
         }),
     )
     price = forms.IntegerField(
@@ -24,6 +25,7 @@ class FilamentForm(forms.Form):
             'class': 'form-control',
             'form': 'filament_form',
             'placeholder': '円単位',
+            'min': 0,
         }),
     )
     shop = forms.CharField(

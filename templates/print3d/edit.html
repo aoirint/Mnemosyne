@@ -22,6 +22,9 @@
       <div class="form-group my-3">
         <label for="id_filament">フィラメント</label>
         {{ form.filament }}
+
+        <label for="id_price_per_gram">グラム単価（原価） / 円</label>
+        <input id="id_price_per_gram" type="text" readonly class="form-control">
       </div>
 
       <div class="form-group my-3">
@@ -30,8 +33,10 @@
       </div>
 
       <div class="form-group my-3">
-        <label for="id_amount">重量</label>
+        <label for="id_amount">重量 / g</label>
         {{ form.amount }}
+        <label for="id_original_price">推定価格（原価） / 円</label>
+        <input id="id_original_price" type="text" readonly class="form-control">
       </div>
 
       <div class="form-group my-3">
@@ -86,6 +91,41 @@
     var last_filament = Cookies.get('last_filament');
     $('#id_filament').val(last_filament);
   }
+
+  var price_per_gram = -1;
+  function update_original_price() {
+    var weight = parseFloat($('#id_amount').val());
+    if (! weight) {
+      $('#id_original_price').val('');
+      return;
+    }
+
+    var original_price = Math.ceil(weight * price_per_gram); // 原価
+    $('#id_original_price').val(original_price);
+  }
+  function update_filament() {
+    var filament_id = $('#id_filament').val();
+    if (! filament_id) return;
+
+    $.get('/filament/info/' + filament_id).done(function(filament) {
+      var fw = filament.amount;
+      var fp = filament.price;
+
+      price_per_gram = fp / fw;
+      $('#id_price_per_gram').val(price_per_gram);
+
+      update_original_price();
+    });
+  }
+
+  update_filament();
+  $('#id_filament').on('change', function(e) {
+    update_filament();
+  });
+
+  $('#id_amount').on('keyup change', function(e) {
+        update_original_price();
+  });
 </script>
 
 {% endblock %}

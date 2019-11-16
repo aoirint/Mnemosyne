@@ -21,4 +21,5 @@ urlpatterns = [
     re_path(r'^filament$', views.index, name='index'),
     re_path(r'^filament/new$', views.new, name='new'),
     re_path(r'^filament/edit/(?P<id>\d+)$', views.edit, name='edit'),
+    re_path(r'^filament/info/(?P<id>\d+)$', views.info, name='info'),
 ]

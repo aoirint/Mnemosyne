@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db import transaction
@@ -58,6 +60,17 @@ def edit(request, id):
         'form': form,
         'filament': filament,
     })
+
+def info(request, id):
+    filament = Filament.objects.get(id=id)
+    data = {
+        'name': filament.name,
+        'price': filament.price,
+        'amount': filament.amount,
+    }
+
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
 
 # Edit Models
 def update_filament(form, filament=None):

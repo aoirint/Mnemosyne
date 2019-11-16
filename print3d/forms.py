@@ -29,6 +29,7 @@ class Print3dForm(forms.Form):
             'class': 'form-control',
             'form': 'print3d_form',
             'placeholder': 'g単位',
+            'min': 0,
         }),
     )
     user = forms.CharField(
