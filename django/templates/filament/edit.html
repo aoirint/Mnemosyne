@@ -57,7 +57,7 @@
       <div class="form-group my-3">
         <label for="id_image">写真（任意）</label>
         {{ form.image }}
-        <img id="filament_image_preview" src="{% if filament.thumbnail %}{{ filament.thumbnail.url }}{% endif %}" class="filament-image-preview" data-src="{{ filament.image_file.url }}">
+        <img id="filament_image_preview" src="{% if filament.thumbnail %}{{ filament.thumbnail.url }}{% endif %}" class="filament-image-preview" data-src="{% if filament.image_file %}{{ filament.image_file.url }}{% endif %}">
 
       </div>
 

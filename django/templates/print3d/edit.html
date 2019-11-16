@@ -47,7 +47,7 @@
       <div class="form-group my-3">
         <label for="id_image">写真（任意）</label>
         {{ form.image }}
-        <img id="print3d_image_preview" src="{% if print3d.thumbnail %}{{ print3d.thumbnail.url }}{% endif %}" class="print3d-image-preview" data-src="{{ print3d.image_file.url }}">
+        <img id="print3d_image_preview" src="{% if print3d.thumbnail %}{{ print3d.thumbnail.url }}{% endif %}" class="print3d-image-preview" data-src="{% if print3d.image_file %}{{ print3d.image_file.url }}{% endif %}">
 
       </div>
 
