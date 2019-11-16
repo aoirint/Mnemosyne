@@ -58,3 +58,10 @@ class FilamentForm(forms.Form):
             'placeholder': 'マイフィラメント',
         }),
     )
+    image = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'form': 'filament_form',
+        }),
+    )

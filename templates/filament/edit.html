@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block BODY %}
-<form id="filament_form" method="POST">
+<form id="filament_form" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
 </form>
 
@@ -50,6 +50,11 @@
       <div class="form-group my-3">
         <label for="id_name">フィラメント名（任意）</label>
         {{ form.name }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_name">写真（任意）</label>
+        {{ form.image }}
       </div>
 
       <div class="form-group my-4 pt-4 d-flex">

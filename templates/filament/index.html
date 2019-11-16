@@ -18,15 +18,15 @@
 
     <div class="col-12 p-4">
       <h3>登録済みフィラメント</h3>
-      <table class="table">
+      <table class="registered-filament-table table">
         <tr>
-          <th>フィラメントID
-          <th>フィラメント名
+          <th>ID
+          <th>名前
+          <th>写真
           <th>素材
           <th>購入重量 / g
           <th>購入価格 / 円
-          <th>購入先（名前）
-          <th>購入先（URL）
+          <th>購入先
           <th>購入者
           <th>登録日
           <th>メニュー
@@ -34,13 +34,16 @@
         <tr>
           <td>{{ fl.id }}
           <td>{{ fl.name }}
+          <td>
+{% if fl.image_file %}
+            <img class="filament-image" src="{{ fl.image_file.url }}">
+{% endif %}
           <td>{{ fl.material }}
           <td>{{ fl.amount }}
           <td>{{ fl.price }}
-          <td>{{ fl.shop }}
-          <td>{{ fl.url }}
+          <td><a href="{{ fl.url }}" target="_blank">{{ fl.shop }}</a>
           <td>{{ fl.owner }}
-          <td>{{ fl.created_at }}
+          <td>{{ fl.created_at |date:'Y-m-d' }}
           <td>
             <a class="btn btn-primary" href="{% url 'filament:edit' fl.id %}">
               編集

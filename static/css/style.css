@@ -3,3 +3,8 @@
 body {
   background-color: #FAFAFA;
 }
+
+.registered-filament-table .filament-image {
+  max-width: 10vw;
+  max-height: 30vh;
+}

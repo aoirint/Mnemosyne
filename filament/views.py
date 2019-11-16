@@ -22,7 +22,7 @@ def index(request):
     })
 
 def new(request):
-    form = FilamentForm(request.POST)
+    form = FilamentForm(request.POST, request.FILES)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -35,7 +35,7 @@ def new(request):
 
 def edit(request, id):
     filament = Filament.objects.get(id=id)
-    form = FilamentForm(request.POST)
+    form = FilamentForm(request.POST, request.FILES)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -68,6 +68,12 @@ def update_filament(form, filament=None):
     filament.url = form.cleaned_data['url']
     filament.owner = form.cleaned_data['owner']
     filament.name = form.cleaned_data['name']
+
+    print('im')
+    image = form.cleaned_data['image']
+    if image:
+        filament.image_file = image
+    print('ok')
 
     filament.save()
 
