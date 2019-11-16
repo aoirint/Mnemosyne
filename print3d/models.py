@@ -19,7 +19,14 @@ class Print3d(models.Model):
     amount = models.FloatField()
 
     memo = models.TextField()
+
     image_file = models.ImageField(upload_to=get_print3d_image_upload_path)
+    thumbnail = ImageSpecField(
+        source='image_file',
+        processors=[ ResizeToFill(256, 256), ],
+        format='JPEG',
+        options={ 'quality': 60 },
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

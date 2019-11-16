@@ -36,8 +36,8 @@
           <td>{{ print3d.user }}
           <td>{{ print3d.memo }}
           <td>
-  {% if print3d.image_file %}
-              <img class="print3d-image" src="{{ print3d.image_file.url }}">
+  {% if print3d.thumbnail %}
+              <img class="print3d-image" src="{{ print3d.thumbnail.url }}" data-src="{{ print3d.image_file.url }}">
   {% endif %}
           <td>
             <a href="{% url 'filament:edit' print3d.filament.id %}">

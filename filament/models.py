@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 # Create your models here.
 FILAMENT_MATERIAL_CHOICES = (
@@ -51,7 +53,14 @@ class Filament(models.Model):
     url = models.URLField()
     owner = models.TextField()
     name = models.TextField()
+
     image_file = models.ImageField(upload_to=get_filament_image_upload_path, null=True)
+    thumbnail = ImageSpecField(
+        source='image_file',
+        processors=[ ResizeToFill(256, 256), ],
+        format='JPEG',
+        options={ 'quality': 60 },
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

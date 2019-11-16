@@ -37,8 +37,8 @@
           <td>{{ fl.id }}
           <td>{{ fl.name }}
           <td>
-{% if fl.image_file %}
-            <img class="filament-image" src="{{ fl.image_file.url }}">
+{% if fl.thumbnail %}
+            <img class="filament-image" src="{{ fl.thumbnail.url }}" data-src="{{ fl.image_file.url }}">
 {% endif %}
           <td>{{ fl.material }}
           <td>{{ fl.amount }}
