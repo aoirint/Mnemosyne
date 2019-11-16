@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block BODY %}
+{% include 'parts/navbar.html' %}
+
+<form id="print3d_form" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+</form>
+
+<div class="container">
+  <div class="row pt-4 bg-white">
+    <div class="col-12 p-4">
+      <h3>
+{% if not print3d %}
+        新しい3Dプリントを登録する
+{% else %}
+        登録済みの3Dプリントを編集する
+{% endif %}
+      </h3>
+
+      <div class="form-group my-3">
+        <label for="id_filament">フィラメント</label>
+        {{ form.filament }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_memo">ユーザ</label>
+        {{ form.user }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_amount">重量</label>
+        {{ form.amount }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_memo">メモ（任意）</label>
+        {{ form.memo }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_name">写真（任意）</label>
+        {{ form.image }}
+      </div>
+
+      <div class="form-group my-4 pt-4 d-flex">
+        <a class="btn btn-secondary w-100 mx-4 p-3" href="{% url 'print3d:index' %}">キャンセル</a>
+        <button type="submit" class="btn btn-primary w-100 mx-4 p-3" form="print3d_form">登録</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  $('#print3d_form').on('submit', function(e) {
+    // save user name to Cookie
+    Cookies.set('user', $('#id_user').val());
+    Cookies.set('last_filament', $('#id_filament').val());
+  });
+
+  // recover user name from Cookie
+  var is_edit = {% if print3d %}true{% else %}false{% endif %};
+
+  var loaded_user = $('#id_user').val();
+  if (! loaded_user && ! is_edit) {
+    var user = Cookies.get('user');
+    $('#id_user').val(user);
+  }
+
+  // recover user name from Cookie
+  var loaded_filament = $('#id_filament').val();
+  if (! loaded_user && ! is_edit) {
+    var last_filament = Cookies.get('last_filament');
+    $('#id_filament').val(last_filament);
+  }
+</script>
+
+{% endblock %}

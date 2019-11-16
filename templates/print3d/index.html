@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block BODY %}
+{% include 'parts/navbar.html' %}
+
+<form id="delete_print3d_form" method="POST">
+  {% csrf_token %}
+  <input name="type" type="hidden">
+  <input name="print3d_id" type="hidden">
+</form>
+
+<div class="container">
+  <div class="row pt-4 bg-white">
+    <div class="col-12 p-4">
+      <a href="{% url 'print3d:new' %}" class="btn btn-lg btn-primary">
+        新しい3Dプリントを登録する
+      </a>
+    </div>
+
+    <div class="col-12 p-4">
+      <h3>登録済み3Dプリント</h3>
+      <table class="registered-print3d-table table">
+        <tr>
+          <th>ID
+          <th>ユーザ
+          <th>メモ
+          <th>写真
+          <th>フィラメント
+          <th>重量 / g
+          <th>登録日
+          <th>メニュー
+{% for print3d in print3ds %}
+        <tr>
+          <td>{{ print3d.id }}
+          <td>{{ print3d.user }}
+          <td>{{ print3d.memo }}
+          <td>
+  {% if print3d.image_file %}
+              <img class="print3d-image" src="{{ print3d.image_file.url }}">
+  {% endif %}
+          <td>
+            <a href="{% url 'filament:edit' print3d.filament.id %}">
+              {{ print3d.filament.id}}. {{ print3d.filament.name }}
+            </a>
+          <td>{{ print3d.amount }}
+          <td>{{ print3d.created_at |date:'Y-m-d' }}
+          <td>
+            <a class="btn btn-primary" href="{% url 'print3d:edit' print3d.id %}">
+              編集
+            </a>
+            <button data-action="delete_print3d" data-id="{{ print3d.id }}" class="btn btn-danger" type="button">
+              削除
+            </button>
+{% endfor %}
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  $('button[data-action]').on('click', function(e) {
+    var action = $(this).attr('data-action');
+    var form = $('#delete_print3d_form');
+
+    if (action == 'delete_print3d') {
+      if (! confirm('本当に削除しますか？')) {
+        e.preventDefault();
+        return;
+      }
+
+      var print3d_id = $(this).attr('data-id');
+      form.find('input[name="type"]').val('delete_print3d');
+      form.find('input[name="print3d_id"]').val(print3d_id);
+
+      form.submit();
+    }
+  });
+</script>
+
+{% endblock %}

@@ -69,11 +69,9 @@ def update_filament(form, filament=None):
     filament.owner = form.cleaned_data['owner']
     filament.name = form.cleaned_data['name']
 
-    print('im')
     image = form.cleaned_data['image']
     if image:
         filament.image_file = image
-    print('ok')
 
     filament.save()
 

@@ -45,7 +45,7 @@ def upload_save(func):
 
 class Filament(models.Model):
     material = models.TextField(choices=FILAMENT_MATERIAL_CHOICES)
-    amount = models.IntegerField()
+    amount = models.FloatField()
     price = models.IntegerField()
     shop = models.TextField()
     url = models.URLField()

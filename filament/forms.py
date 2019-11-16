@@ -10,7 +10,7 @@ class FilamentForm(forms.Form):
             'form': 'filament_form',
         }),
     )
-    amount = forms.IntegerField(
+    amount = forms.FloatField(
         required=True,
         widget=forms.NumberInput(attrs={
             'class': 'form-control',

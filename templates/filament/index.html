@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block BODY %}
+{% include 'parts/navbar.html' %}
+
 <form id="delete_filament_form" method="POST">
   {% csrf_token %}
   <input name="type" type="hidden">
@@ -11,7 +13,7 @@
 <div class="container">
   <div class="row pt-4 bg-white">
     <div class="col-12 p-4">
-      <a href="{% url 'filament:new' %}" class="btn btn-primary">
+      <a href="{% url 'filament:new' %}" class="btn btn-lg btn-primary">
         新しいフィラメントを登録する
       </a>
     </div>

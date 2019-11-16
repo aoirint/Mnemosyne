@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block BODY %}
+{% include 'parts/navbar.html' %}
+
 <form id="filament_form" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
 </form>
@@ -65,5 +67,20 @@
 
   </div>
 </div>
+
+<script>
+  $('#filament_form').on('submit', function(e) {
+    // save user name to Cookie
+    Cookies.set('user', $('#id_owner').val());
+  });
+
+  // recover user name from Cookie
+  var loaded_owner = $('#id_owner').val();
+  var is_edit = {% if filament %}true{% else %}false{% endif %};
+  if (! loaded_owner && ! is_edit) {
+    var user = Cookies.get('user');
+    $('#id_owner').val(user);
+  }
+</script>
 
 {% endblock %}

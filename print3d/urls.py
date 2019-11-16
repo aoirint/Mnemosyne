@@ -13,16 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, re_path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import re_path
+from print3d import views
 
+app_name = 'print3d'
 urlpatterns = [
-    path('', include('home.urls', namespace='home')),
-    path('', include('filament.urls', namespace='filament')),
-    path('', include('print3d.urls', namespace='print3d')),
+    re_path(r'^print3d$', views.index, name='index'),
+    re_path(r'^print3d/new$', views.new, name='new'),
+    re_path(r'^print3d/edit/(?P<id>\d+)$', views.edit, name='edit'),
 ]
-
-# urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
