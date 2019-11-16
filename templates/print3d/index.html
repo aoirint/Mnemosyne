@@ -28,6 +28,7 @@
           <th>写真
           <th>フィラメント
           <th>重量 / g
+          <th>原価 / 円
           <th>登録日
           <th>メニュー
 {% for print3d in print3ds %}
@@ -44,6 +45,7 @@
               {{ print3d.filament.id}}. {{ print3d.filament.name }}
             </a>
           <td>{{ print3d.amount }}
+          <td>{{ print3d.estimated_original_price }}
           <td>{{ print3d.created_at |date:'Y-m-d' }}
           <td>
             <a class="btn btn-primary" href="{% url 'print3d:edit' print3d.id %}">

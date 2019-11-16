@@ -92,6 +92,18 @@
     $('#id_filament').val(last_filament);
   }
 
+  // https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Math/round
+  function round(number, precision) {
+    var shift = function (number, precision, reverseShift) {
+      if (reverseShift) {
+        precision = -precision;
+      }
+      var numArray = ("" + number).split("e");
+      return +(numArray[0] + "e" + (numArray[1] ? (+numArray[1] + precision) : precision));
+    };
+    return shift(Math.round(shift(number, precision, false)), precision, true);
+  }
+
   var price_per_gram = -1;
   function update_original_price() {
     var weight = parseFloat($('#id_amount').val());
@@ -100,7 +112,7 @@
       return;
     }
 
-    var original_price = Math.ceil(weight * price_per_gram); // 原価
+    var original_price = round(weight * price_per_gram, 3); // 原価
     $('#id_original_price').val(original_price);
   }
   function update_filament() {
@@ -112,7 +124,7 @@
       var fp = filament.price;
 
       price_per_gram = fp / fw;
-      $('#id_price_per_gram').val(price_per_gram);
+      $('#id_price_per_gram').val(round(price_per_gram, 3));
 
       update_original_price();
     });

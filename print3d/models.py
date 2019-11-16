@@ -31,6 +31,10 @@ class Print3d(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def estimated_original_price(self):
+        return self.amount * self.filament.price / self.filament.amount
+
     @upload_save
     def save(self, *args, **kwargs):
         super(self.__class__, self).save(*args, **kwargs)
