@@ -8,3 +8,9 @@ body {
   max-width: 10vw;
   max-height: 30vh;
 }
+
+.filament-image-preview, .print3d-image-preview {
+  margin: 0.5rem;
+  max-width: 100%;
+  max-height: 30vh;
+}

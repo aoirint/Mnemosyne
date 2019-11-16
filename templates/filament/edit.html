@@ -55,8 +55,10 @@
       </div>
 
       <div class="form-group my-3">
-        <label for="id_name">写真（任意）</label>
+        <label for="id_image">写真（任意）</label>
         {{ form.image }}
+        <img id="filament_image_preview" src="{% if filament.image_file %}{{ filament.image_file.url }}{% endif %}" class="filament-image-preview">
+
       </div>
 
       <div class="form-group my-4 pt-4 d-flex">
@@ -69,6 +71,17 @@
 </div>
 
 <script>
+  var is_edit = {% if filament %}true{% else %}false{% endif %};
+
+  $('#id_image').on('change', function(e) {
+      var file = e.target.files[0];
+      var blobUrl = window.URL.createObjectURL(file);
+      $('#filament_image_preview').attr('src', blobUrl);
+  });
+  var loaded_image = $('#id_image').val();
+  if (loaded_image)
+    $('#filament_image_preview').attr('src', loaded_image);
+
   $('#filament_form').on('submit', function(e) {
     // save user name to Cookie
     Cookies.set('user', $('#id_owner').val());
@@ -76,7 +89,6 @@
 
   // recover user name from Cookie
   var loaded_owner = $('#id_owner').val();
-  var is_edit = {% if filament %}true{% else %}false{% endif %};
   if (! loaded_owner && ! is_edit) {
     var user = Cookies.get('user');
     $('#id_owner').val(user);

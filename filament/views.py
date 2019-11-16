@@ -18,6 +18,7 @@ def index(request):
     filaments = Filament.objects.all().order_by('-created_at')
 
     return render(request, 'filament/index.html', {
+        'title': 'フィラメント | Mnemosyne',
         'filaments': filaments,
     })
 
@@ -30,6 +31,7 @@ def new(request):
             return redirect('filament:edit', id=filament.id)
 
     return render(request, 'filament/edit.html', {
+        'title': '新しいフィラメントの登録 | Mnemosyne',
         'form': form,
     })
 
@@ -52,6 +54,7 @@ def edit(request, id):
     form.fields['name'].initial = filament.name
 
     return render(request, 'filament/edit.html', {
+        'title': '登録済みフィラメントの編集 | Mnemosyne',
         'form': form,
         'filament': filament,
     })

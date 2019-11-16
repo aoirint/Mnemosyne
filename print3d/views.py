@@ -19,6 +19,7 @@ def index(request):
     print3ds = Print3d.objects.all().order_by('-created_at')
 
     return render(request, 'print3d/index.html', {
+        'title': '3Dプリント | Mnemosyne',
         'print3ds': print3ds,
     })
 
@@ -30,6 +31,7 @@ def new(request):
             return redirect('print3d:index')
 
     return render(request, 'print3d/edit.html', {
+        'title': '新しい3Dプリントの登録 | Mnemosyne',
         'form': form,
     })
 
@@ -48,6 +50,7 @@ def edit(request, id):
     form.fields['memo'].initial = print3d.memo
 
     return render(request, 'print3d/edit.html', {
+        'title': '登録済み3Dプリントの編集 | Mnemosyne',
         'form': form,
         'print3d': print3d,
     })

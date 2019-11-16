@@ -25,7 +25,7 @@
       </div>
 
       <div class="form-group my-3">
-        <label for="id_memo">ユーザ</label>
+        <label for="id_user">ユーザ</label>
         {{ form.user }}
       </div>
 
@@ -40,8 +40,10 @@
       </div>
 
       <div class="form-group my-3">
-        <label for="id_name">写真（任意）</label>
+        <label for="id_image">写真（任意）</label>
         {{ form.image }}
+        <img id="print3d_image_preview" src="{% if print3d.image_file %}{{ print3d.image_file.url }}{% endif %}" class="print3d-image-preview">
+
       </div>
 
       <div class="form-group my-4 pt-4 d-flex">
@@ -54,6 +56,17 @@
 </div>
 
 <script>
+  var is_edit = {% if print3d %}true{% else %}false{% endif %};
+
+  $('#id_image').on('change', function(e) {
+      var file = e.target.files[0];
+      var blobUrl = window.URL.createObjectURL(file);
+      $('#print3d_image_preview').attr('src', blobUrl);
+  });
+  var loaded_image = $('#id_image').val();
+  if (loaded_image)
+    $('#print3d_image_preview').attr('src', loaded_image);
+
   $('#print3d_form').on('submit', function(e) {
     // save user name to Cookie
     Cookies.set('user', $('#id_user').val());
@@ -61,8 +74,6 @@
   });
 
   // recover user name from Cookie
-  var is_edit = {% if print3d %}true{% else %}false{% endif %};
-
   var loaded_user = $('#id_user').val();
   if (! loaded_user && ! is_edit) {
     var user = Cookies.get('user');
