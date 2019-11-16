@@ -1,0 +1,5 @@
+Django==2.2.7
+django-appconf==1.0.3
+django-imagekit==4.0.2
+Pillow==6.2.1
+pytz==2019.1
