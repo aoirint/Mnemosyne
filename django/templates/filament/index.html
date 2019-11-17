@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block BODY %}
+{% include 'parts/navbar.html' %}
+
+<form id="delete_filament_form" method="POST">
+  {% csrf_token %}
+  <input name="type" type="hidden">
+  <input name="filament_id" type="hidden">
+</form>
+
+<div class="container">
+  <div class="row pt-4 bg-white">
+    <div class="col-12 p-4">
+      <a href="{% url 'filament:new' %}" class="btn btn-lg btn-primary">
+        新しいフィラメントを登録する
+      </a>
+    </div>
+
+    <div class="col-12 p-4">
+      <h3>登録済みフィラメント</h3>
+      <table class="registered-filament-table table">
+        <tr>
+          <th>ID
+          <th>名前
+          <th>写真
+          <th>素材
+          <th>購入重量 / g
+          <th>購入価格 / 円
+          <th>購入先
+          <th>購入者
+          <th>登録日
+          <th>メニュー
+{% for fl in filaments %}
+        <tr>
+          <td>{{ fl.id }}
+          <td>{{ fl.name }}
+          <td>
+{% if fl.thumbnail %}
+            <img class="filament-image" src="{{ fl.thumbnail.url }}" data-src="{{ fl.image_file.url }}">
+{% endif %}
+          <td>{{ fl.material }}
+          <td>{{ fl.amount }}
+          <td>{{ fl.price }}
+          <td><a href="{{ fl.url }}" target="_blank">{{ fl.shop }}</a>
+          <td>{{ fl.owner }}
+          <td>{{ fl.created_at |date:'Y-m-d' }}
+          <td>
+            <a class="btn btn-primary" href="{% url 'filament:edit' fl.id %}">
+              編集
+            </a>
+            <button data-action="delete_filament" data-id="{{ fl.id }}" class="btn btn-danger" type="button">
+              削除
+            </button>
+{% endfor %}
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  $('button[data-action]').on('click', function(e) {
+    var action = $(this).attr('data-action');
+    var form = $('#delete_filament_form');
+
+    if (action == 'delete_filament') {
+      if (! confirm('本当に削除しますか？')) {
+        e.preventDefault();
+        return;
+      }
+
+      var filament_id = $(this).attr('data-id');
+      form.find('input[name="type"]').val('delete_filament');
+      form.find('input[name="filament_id"]').val(filament_id);
+
+      form.submit();
+    }
+  });
+</script>
+
+{% endblock %}

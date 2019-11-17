@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block BODY %}
+{% include 'parts/navbar.html' %}
+
+<form id="filament_form" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+</form>
+
+<div class="container">
+  <div class="row pt-4 bg-white">
+    <div class="col-12 p-4">
+      <h3>
+{% if not filament %}
+        新しいフィラメントを登録する
+{% else %}
+        登録済みのフィラメントを編集する
+{% endif %}
+      </h3>
+
+      <div class="form-group my-3">
+        <label for="id_material">素材（リストにない素材の場合はシステム管理者に問い合わせてください）</label>
+        {{ form.material }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_amount">購入重量 / g</label>
+        {{ form.amount }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_price">購入価格 / 円</label>
+        {{ form.price }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_shop">購入先名（任意）</label>
+        {{ form.shop }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_url">購入先URL（任意）</label>
+        {{ form.url }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_owner">購入者（任意）</label>
+        {{ form.owner }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_name">フィラメント名（任意）</label>
+        {{ form.name }}
+      </div>
+
+      <div class="form-group my-3">
+        <label for="id_image">写真（任意）</label>
+        {{ form.image }}
+        <img id="filament_image_preview" src="{% if filament.thumbnail %}{{ filament.thumbnail.url }}{% endif %}" class="filament-image-preview" data-src="{% if filament.image_file %}{{ filament.image_file.url }}{% endif %}">
+
+      </div>
+
+      <div class="form-group my-4 pt-4 d-flex">
+        <a class="btn btn-secondary w-100 mx-4 p-3" href="{% url 'filament:index' %}">キャンセル</a>
+        <button type="submit" class="btn btn-primary w-100 mx-4 p-3" form="filament_form">登録</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  var is_edit = {% if filament %}true{% else %}false{% endif %};
+
+  $('#id_image').on('change', function(e) {
+      var file = e.target.files[0];
+      var blobUrl = window.URL.createObjectURL(file);
+      $('#filament_image_preview').attr('src', blobUrl);
+  });
+  var loaded_image = $('#id_image').val();
+  if (loaded_image)
+    $('#filament_image_preview').attr('src', loaded_image);
+
+  $('#filament_form').on('submit', function(e) {
+    // save user name to Cookie
+    Cookies.set('user', $('#id_owner').val());
+  });
+
+  // recover user name from Cookie
+  var loaded_owner = $('#id_owner').val();
+  if (! loaded_owner && ! is_edit) {
+    var user = Cookies.get('user');
+    $('#id_owner').val(user);
+  }
+</script>
+
+{% endblock %}
