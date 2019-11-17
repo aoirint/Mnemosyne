@@ -30,7 +30,7 @@ def new(request):
     if request.method == 'POST':
         if form.is_valid():
             filament = update_filament(form)
-            return redirect('filament:edit', id=filament.id)
+            return redirect('filament:index')
 
     return render(request, 'filament/edit.html', {
         'title': '新しいフィラメントの登録 | Mnemosyne',
