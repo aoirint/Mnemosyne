@@ -4,13 +4,13 @@ services:
     image: aoirint/mnemosyne
     restart: always
 
-    command: python3 /code/manage.py runserver 0.0.0.0:8000
-    # command: gunicorn -w 2 -b 0.0.0.0:8000 --chdir /code Mnemosyne.wsgi:application
+    # command: python3 /code/manage.py runserver 0.0.0.0:8000
+    command: gunicorn -w 2 -b 0.0.0.0:8000 --chdir /code Mnemosyne.wsgi:application
 
     environment:
       PYTHONUNBUFFERED: 1
       DJANGO_SECRET_KEY: my_django_secret
-      DJANGO_DEBUG: 1
+      DJANGO_DEBUG: 0
       DJANGO_ALLOWED_HOST: upstream-server
 
       DJANGO_DATABASE_ENGINE: django.db.backends.mysql

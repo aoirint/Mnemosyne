@@ -1,19 +1,13 @@
 # Mnemosyne
 3Dプリンタに使うフィラメントの在庫と使用量を記録するためのWebアプリ。
 
-Docker対応は途中です（nginxによる静的ファイル配信をする予定）。
+![new filament](https://i.imgur.com/DEFL6mg.png)
 
-現状、デプロイ時はgunicornによる起動に書き換えてください（nginx対応と同時に対応予定）。
+![new 3dprint](https://i.imgur.com/EtG8CH2.png)
 
-## ビルド
-```
-docker build . -t aoirint/Mnemosyne
-```
+`docker-compose.yml`をこのリポジトリからコピーし、SECRETなどを適切に書き換えたのち、以下のように起動する。
 
-## 実行（開発用）
+```bash
+docker-compose pull
+docker-compose up -d
 ```
-docker run --rm -it -p 8000:8000 -e DJANGO_SECRET=hogehoge -e ALLOWED_HOST=* -e ENVIRONMENT=development aoirint/mnemosyne
-```
-
-ホストの`0.0.0.0:8000`にフォワーディングします。
-デフォルトのDockerfileのコマンドは開発用簡易サーバなので注意。
