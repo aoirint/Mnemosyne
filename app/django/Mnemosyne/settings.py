@@ -10,29 +10,31 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+from urllib.parse import urljoin
+from pathlib import Path
 import os
 import sys
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.join(BASE_DIR, 'apps'))
+BASE_DIR = Path(__file__).resolve().parent.parent
+APPS_DIR = BASE_DIR / 'apps'
+sys.path.append(str(APPS_DIR))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['DJANGO_SECRET']
-
-env = os.environ['ENVIRONMENT']
-assert env in [ 'development', 'production' ]
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env == 'development'
+DEBUG = os.environ.get('DJANGO_DEBUG', '0') == '1'
 
 ALLOWED_HOSTS = [ 'localhost' ]
 ALLOWED_HOST = os.environ.get('DJANGO_ALLOWED_HOST')
 if ALLOWED_HOST:
-    ALLOWED_HOSTS += ALLOWED_HOST
+    ALLOWED_HOSTS += [ ALLOWED_HOST, ]
 
 # Application definition
 
@@ -82,12 +84,25 @@ WSGI_APPLICATION = 'Mnemosyne.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+DATABASE_ENGINE = os.environ.get('DJANGO_DATABASE_ENGINE', 'django.db.backends.sqlite3')
+DATABASE_OPTIONS = {}
+if DATABASE_ENGINE == 'django.db.backends.mysql':
+    DATABASE_OPTIONS = {
+        'charset': os.environ.get('DJANGO_DATABASE_CHARSET'),
+    }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+        'ENGINE': DATABASE_ENGINE,
+        'HOST': os.environ.get('DJANGO_DATABASE_HOST'),
+        'PORT': os.environ.get('DJANGO_DATABASE_PORT'),
+        'NAME': os.environ.get('DJANGO_DATABASE_NAME', BASE_DIR / 'db.sqlite3'),
+        'USER': os.environ.get('DJANGO_DATABASE_USER'),
+        'PASSWORD': os.environ.get('DJANGO_DATABASE_PASSWORD'),
+        'OPTIONS': DATABASE_OPTIONS,
+    },
 }
+
 
 
 # Password validation
@@ -126,11 +141,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
-if DEBUG:
-    STATICFILES_DIRS = [ os.path.join(BASE_DIR, "static"), ]
-else:
-    STATICFILES_DIRS = os.path.join(BASE_DIR, "static")
+STATIC_URL = os.environ.get('DJANGO_STATIC_URL', '/static/')
+STATIC_ROOT = BASE_DIR / 'static'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = os.environ.get('DJANGO_MEDIA_URL', '/media/')
+MEDIA_ROOT = BASE_DIR / 'media'

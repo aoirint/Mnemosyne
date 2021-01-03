@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  app:
+    image: aoirint/mnemosyne
+    restart: always
+
+    command: python3 /code/manage.py runserver 0.0.0.0:8000
+    # command: gunicorn -w 2 -b 0.0.0.0:8000 --chdir /code Mnemosyne.wsgi:application
+
+    environment:
+      PYTHONUNBUFFERED: 1
+      DJANGO_SECRET_KEY: my_django_secret
+      DJANGO_DEBUG: 1
+      DJANGO_ALLOWED_HOST: upstream-server
+
+      DJANGO_DATABASE_ENGINE: django.db.backends.mysql
+      DJANGO_DATABASE_NAME: mysql
+      DJANGO_DATABASE_USER: root
+      DJANGO_DATABASE_PASSWORD: mysql
+      DJANGO_DATABASE_HOST: db
+      DJANGO_DATABASE_PORT: 3306
+      DJANGO_DATABASE_CHARSET: utf8mb4
+
+    depends_on:
+      - 'db'
+
+  nginx:
+    image: nginx:1.19
+    restart: always
+    ports:
+      - '8000:80'
+    volumes:
+      - ./nginx:/etc/nginx/templates
+      - ./app/django/static:/static
+    depends_on:
+      - 'app'
+
+  db:
+    image: mariadb:10.5
+    restart: always
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./db/auth:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: mysql
