@@ -1,0 +1,54 @@
+name: Push to Docker registry
+
+on:
+   push:
+     tags:
+       - 'v*'
+
+jobs:
+  dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Login to docker hub
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_REGISTRY_URL: docker.io
+
+      - name: Build :tag
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: build -t aoirint/mnemosyne:${IMAGE_TAG} ./app/
+
+      - name: Build :latest
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: build -t aoirint/mnemosyne:latest ./app/
+
+      - name: Deploy :tag
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: push aoirint/mnemosyne:${IMAGE_TAG}
+
+      - name: Deploy :latest
+        if: success()
+        uses: actions-hub/docker@master
+        with:
+          args: push aoirint/mnemosyne:latest
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
