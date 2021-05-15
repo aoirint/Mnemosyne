@@ -14,6 +14,7 @@
         - `nginx/`
             - `default.conf.template`
 3. `DJANGO_SECRET_KEY`を書き換える
+    - `pip3 install -U django && python3 -c "from django.core.management import utils; print(f'SECRET_KEY={utils.get_random_secret_key()}')"`
 4. `make pull`（`docker-compose pull`）で最新のDockerイメージを取得する
 5. `make up`（`docker-compose up -d`）で起動する
 6. `make logs`（`docker-compose logs -f`）でログを確認する
