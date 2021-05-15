@@ -5,19 +5,28 @@
 
 ![new 3dprint](https://i.imgur.com/EtG8CH2.png)
 
-`docker-compose.yaml`をこのリポジトリからコピーし、SECRETなどを適切に書き換えたのち、以下のように起動する。
 
-```bash
-docker-compose pull
-docker-compose up -d
-# Or
-make pull
-make up
-```
+## Deploy
+1. `docker-compose.yaml`をこのリポジトリからコピーする
+2. `nginx`ディレクトリをこのリポジトリからコピーする
+    - ディレクトリ構造
+        - `docker-compose.yaml`
+        - `nginx/`
+            - `default.conf.template`
+3. `DJANGO_SECRET_KEY`を書き換える
+4. `make pull`（`docker-compose pull`）で最新のDockerイメージを取得する
+5. `make up`（`docker-compose up -d`）で起動する
+6. `make logs`（`docker-compose logs -f`）でログを確認する
+7. リバースプロキシの設定をする
+    - デフォルトで`127.0.0.1:8000`にバインド
+
+- 停止：`make down`
+- 全データの削除：`make dangerous-down`
+
 
 ## Development
 
-Create `docker-compose.override.yaml`.
+`docker-compose.override.yaml`を作成する。
 
 ```yaml
 version: '3.8'
