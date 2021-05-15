@@ -1,8 +1,7 @@
 version: '3.8'
 services:
   app:
-    # image: aoirint/mnemosyne
-    build: ./app
+    image: aoirint/mnemosyne
     restart: always
 
     # command: python3 /code/manage.py runserver 0.0.0.0:8000

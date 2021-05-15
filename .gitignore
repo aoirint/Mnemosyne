@@ -5,3 +5,4 @@ __pycache__/
 /app/django/media/
 /db
 
+/docker-compose.override.yaml

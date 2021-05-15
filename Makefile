@@ -10,6 +10,10 @@ up: build
 upr: build
 	docker-compose up -d --force-recreate
 
+.PHONY: pull
+pull:
+	docker-compose pull
+
 .PHONY: down
 down:
 	docker-compose down
