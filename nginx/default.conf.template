@@ -26,4 +26,9 @@ server {
 		autoindex on;
 	}
 
+	location /media/ {
+		alias /media/;
+		autoindex on;
+	}
+
 }

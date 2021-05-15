@@ -1,11 +1,17 @@
 version: '3.8'
 services:
   app:
-    image: aoirint/mnemosyne
+    # image: aoirint/mnemosyne
+    build: ./app
     restart: always
 
     # command: python3 /code/manage.py runserver 0.0.0.0:8000
     command: gunicorn -w 2 -b 0.0.0.0:8000 --chdir /code Mnemosyne.wsgi:application
+
+    volumes:
+      # - ./app/django:/code
+      - static-data:/code/_static
+      - media-data:/code/media
 
     environment:
       PYTHONUNBUFFERED: 1
@@ -28,19 +34,25 @@ services:
     image: nginx:1.19
     restart: always
     ports:
-      - '8000:80'
+      - '127.0.0.1:8000:80'
     volumes:
       - ./nginx:/etc/nginx/templates
-      - ./app/django/static:/static
+      - static-data:/static
+      - media-data:/media
     depends_on:
       - 'app'
 
   db:
     image: mariadb:10.5
     restart: always
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     volumes:
-      - ./db/auth:/var/lib/mysql
+      - db-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: mysql
+
+volumes:
+  db-data:
+  static-data:
+  media-data:
